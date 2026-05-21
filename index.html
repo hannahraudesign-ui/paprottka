@@ -1,0 +1,1695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gebr. Paprottka GmbH – Engineering Excellence in Power Generation</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --orange: #E8820A;
+      --orange-light: #F5960E;
+      --orange-dark: #C96E00;
+      --dark: #1A1A1A;
+      --darker: #111111;
+      --gray: #4A4A4A;
+      --light-gray: #F5F5F5;
+      --white: #FFFFFF;
+      --section-pad: 100px 0;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      color: var(--dark);
+      background: var(--white);
+      overflow-x: hidden;
+    }
+
+    /* ─── SCROLLBAR ─── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #f1f1f1; }
+    ::-webkit-scrollbar-thumb { background: var(--orange); border-radius: 3px; }
+
+    /* ─── UTILITY ─── */
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 40px; }
+    .section-label {
+      font-size: 12px; font-weight: 600; letter-spacing: 3px;
+      text-transform: uppercase; color: var(--orange); margin-bottom: 16px;
+    }
+    .btn {
+      display: inline-block; padding: 14px 32px;
+      background: var(--orange); color: var(--white);
+      font-size: 14px; font-weight: 600; letter-spacing: 0.5px;
+      text-decoration: none; border: 2px solid var(--orange);
+      cursor: pointer; transition: all 0.3s ease;
+      font-family: inherit;
+    }
+    .btn:hover { background: var(--orange-dark); border-color: var(--orange-dark); transform: translateY(-1px); }
+    .btn-outline {
+      background: transparent; color: var(--white);
+      border: 2px solid var(--white);
+    }
+    .btn-outline:hover { background: var(--white); color: var(--dark); }
+
+    /* ─── SCROLL ANIMATIONS ─── */
+    .reveal {
+      opacity: 0; transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-left { opacity: 0; transform: translateX(-30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal-left.visible { opacity: 1; transform: translateX(0); }
+    .reveal-right { opacity: 0; transform: translateX(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal-right.visible { opacity: 1; transform: translateX(0); }
+
+    /* ─── NAVIGATION ─── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      transition: all 0.4s ease;
+      padding: 20px 0;
+    }
+    nav.scrolled {
+      background: rgba(17,17,17,0.97);
+      backdrop-filter: blur(10px);
+      padding: 14px 0;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    .nav-inner {
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 12px; text-decoration: none;
+    }
+    .nav-logo-icon {
+      width: 42px; height: 42px; flex-shrink: 0;
+    }
+    .nav-logo-icon svg { width: 100%; height: 100%; display: block; }
+    .nav-logo-text {
+      color: var(--white); font-size: 15px; font-weight: 700; letter-spacing: 0.5px;
+    }
+    .nav-logo-text span { color: var(--orange); }
+    .nav-links {
+      display: flex; gap: 36px; list-style: none;
+    }
+    .nav-links a {
+      color: rgba(255,255,255,0.85); text-decoration: none;
+      font-size: 14px; font-weight: 500; letter-spacing: 0.3px;
+      position: relative; transition: color 0.2s;
+    }
+    .nav-links a::after {
+      content: ''; position: absolute; bottom: -4px; left: 0; right: 0;
+      height: 2px; background: var(--orange);
+      transform: scaleX(0); transition: transform 0.3s ease;
+    }
+    .nav-links a:hover { color: var(--white); }
+    .nav-links a:hover::after { transform: scaleX(1); }
+    .nav-cta { margin-left: 16px; }
+    .hamburger {
+      display: none; flex-direction: column; gap: 5px;
+      cursor: pointer; background: none; border: none; padding: 4px;
+    }
+    .hamburger span {
+      display: block; width: 24px; height: 2px; background: white;
+      transition: all 0.3s ease;
+    }
+
+    /* ─── HERO ─── */
+    #hero {
+      position: relative; height: 100vh; min-height: 680px;
+      display: flex; align-items: center;
+      background: #0d0d0d;
+      overflow: hidden;
+      padding-top: 80px; /* offset for fixed nav */
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background-image: url('https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=1800&auto=format&fit=crop&q=80');
+      background-size: cover; background-position: center 40%;
+      opacity: 0.58;
+    }
+    /* Directional overlay so left side text stays readable */
+    #hero::before {
+      content: ''; position: absolute; inset: 0; z-index: 1;
+      background:
+        linear-gradient(to right, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.35) 55%, rgba(0,0,0,0.05) 100%),
+        linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, transparent 40%, rgba(0,0,0,0.15) 100%);
+    }
+    .hero-grid {
+      position: absolute; inset: 0; z-index: 1;
+      background-image:
+        linear-gradient(rgba(232,130,10,0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(232,130,10,0.06) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+    .hero-content {
+      position: relative; z-index: 2; max-width: 680px;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(232,130,10,0.12); border: 1px solid rgba(232,130,10,0.45);
+      color: var(--orange); padding: 8px 18px; font-size: 11px;
+      font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase;
+      margin-bottom: 32px;
+    }
+    .hero-badge::before {
+      content: ''; width: 6px; height: 6px; border-radius: 50%;
+      background: var(--orange); animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.4); }
+    }
+    #hero h1 {
+      font-size: clamp(2.6rem, 5vw, 4.2rem);
+      font-weight: 800; color: #FFFFFF;
+      line-height: 1.12; margin-bottom: 24px; letter-spacing: -0.5px;
+      text-shadow: 0 2px 40px rgba(0,0,0,0.5);
+    }
+    #hero h1 em { color: var(--orange); font-style: normal; }
+    #hero p {
+      font-size: 17px; color: rgba(255,255,255,0.82);
+      line-height: 1.75; max-width: 560px; margin-bottom: 44px;
+      text-shadow: 0 1px 12px rgba(0,0,0,0.6);
+    }
+    .hero-btns { display: flex; gap: 16px; flex-wrap: wrap; }
+    .hero-scroll {
+      position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      color: rgba(255,255,255,0.45); font-size: 10px; letter-spacing: 2.5px;
+      text-transform: uppercase; cursor: pointer; z-index: 3;
+    }
+    .hero-scroll-line {
+      width: 1px; height: 40px; background: rgba(255,255,255,0.2);
+      position: relative; overflow: hidden;
+    }
+    .hero-scroll-line::after {
+      content: ''; position: absolute; top: -100%; left: 0; right: 0;
+      height: 100%; background: var(--orange);
+      animation: scrollLine 2s ease-in-out infinite;
+    }
+    @keyframes scrollLine {
+      0% { top: -100%; }
+      100% { top: 100%; }
+    }
+
+    /* ─── ABOUT ─── */
+    #about { padding: var(--section-pad); background: var(--white); }
+    .about-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+    }
+    .about-content h2 {
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      font-weight: 800; line-height: 1.2; margin-bottom: 20px; color: var(--dark);
+    }
+    .about-content p {
+      font-size: 16px; color: var(--gray); line-height: 1.8; margin-bottom: 28px;
+    }
+    .about-checks { list-style: none; margin-bottom: 36px; display: flex; flex-direction: column; gap: 12px; }
+    .about-checks li {
+      display: flex; align-items: center; gap: 12px;
+      font-size: 15px; color: var(--dark); font-weight: 500;
+    }
+    .check-icon {
+      width: 22px; height: 22px; background: var(--orange);
+      border-radius: 50%; display: flex; align-items: center;
+      justify-content: center; flex-shrink: 0;
+    }
+    .check-icon svg { width: 11px; height: 11px; stroke: white; stroke-width: 3; fill: none; }
+    .about-visual {
+      position: relative;
+    }
+    .world-map-container {
+      background: var(--light-gray); padding: 40px; border-radius: 4px;
+      position: relative; overflow: hidden;
+    }
+    .world-map-container::before {
+      content: 'Global Reach';
+      position: absolute; top: 20px; left: 24px;
+      font-size: 11px; font-weight: 600; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--gray);
+    }
+    /* SVG World Map */
+    .world-map-svg { width: 100%; margin-top: 16px; }
+    .map-dot {
+      fill: var(--orange);
+      animation: mapPulse 3s ease-in-out infinite;
+    }
+    .map-dot:nth-child(2) { animation-delay: 0.5s; }
+    .map-dot:nth-child(3) { animation-delay: 1s; }
+    .map-dot:nth-child(4) { animation-delay: 1.5s; }
+    .map-dot:nth-child(5) { animation-delay: 2s; }
+    @keyframes mapPulse {
+      0%, 100% { r: 4; opacity: 1; }
+      50% { r: 7; opacity: 0.6; }
+    }
+    .about-accent {
+      position: absolute; bottom: -16px; right: -16px;
+      width: 100px; height: 100px; background: var(--orange); opacity: 0.15;
+    }
+
+    /* ─── STATS BAR ─── */
+    #stats {
+      background: var(--orange); padding: 60px 0;
+    }
+    .stats-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 0; text-align: center;
+    }
+    .stat-item {
+      padding: 20px; border-right: 1px solid rgba(255,255,255,0.25);
+      position: relative;
+    }
+    .stat-item:last-child { border-right: none; }
+    .stat-number {
+      font-size: clamp(2.2rem, 4vw, 3.2rem); font-weight: 800;
+      color: var(--white); line-height: 1; margin-bottom: 8px;
+    }
+    .stat-number .plus { color: rgba(255,255,255,0.7); font-weight: 400; }
+    .stat-label {
+      font-size: 13px; font-weight: 500; letter-spacing: 1px;
+      color: rgba(255,255,255,0.8); text-transform: uppercase;
+    }
+
+    /* ─── SERVICES ─── */
+    #services { padding: var(--section-pad); background: var(--white); }
+    .section-header { margin-bottom: 60px; }
+    .section-header h2 {
+      font-size: clamp(1.8rem, 3vw, 2.6rem); font-weight: 800;
+      color: var(--dark); line-height: 1.2;
+    }
+    .services-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px;
+      background: #e8e8e8;
+    }
+    .service-card {
+      background: var(--white); padding: 48px 44px;
+      position: relative; overflow: hidden;
+      transition: all 0.3s ease;
+    }
+    .service-card::before {
+      content: ''; position: absolute; bottom: 0; left: 0;
+      width: 0; height: 3px; background: var(--orange);
+      transition: width 0.4s ease;
+    }
+    .service-card:hover::before { width: 100%; }
+    .service-card:hover { box-shadow: 0 8px 40px rgba(0,0,0,0.08); }
+    .service-icon {
+      width: 56px; height: 56px; background: rgba(232,130,10,0.1);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 24px; transition: background 0.3s;
+    }
+    .service-card:hover .service-icon { background: var(--orange); }
+    .service-icon svg { width: 26px; height: 26px; transition: stroke 0.3s; }
+    .service-card:hover .service-icon svg { stroke: white !important; }
+    .service-card h3 {
+      font-size: 20px; font-weight: 700; margin-bottom: 16px; color: var(--dark);
+    }
+    .service-card ul {
+      list-style: none; display: flex; flex-direction: column; gap: 8px;
+    }
+    .service-card ul li {
+      font-size: 14px; color: var(--gray); line-height: 1.6;
+      padding-left: 14px; position: relative;
+    }
+    .service-card ul li::before {
+      content: '—'; position: absolute; left: 0;
+      color: var(--orange); font-weight: 700;
+    }
+    .service-number {
+      position: absolute; top: 24px; right: 28px;
+      font-size: 60px; font-weight: 800; color: rgba(0,0,0,0.04);
+      line-height: 1; pointer-events: none; user-select: none;
+    }
+
+    /* ─── PROJECTS ─── */
+    #projects { padding: var(--section-pad); background: var(--light-gray); }
+    .projects-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+    }
+    .project-card {
+      background: var(--white); overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .project-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+    }
+    .project-image {
+      height: 220px; overflow: hidden; position: relative;
+      background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+    }
+    .project-image img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    .project-card:hover .project-image img { transform: scale(1.06); }
+    .project-image-placeholder {
+      width: 100%; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(135deg, #2a2a2a, #1a1a1a);
+    }
+    .project-image-placeholder svg {
+      width: 48px; height: 48px; opacity: 0.3; stroke: white; fill: none;
+    }
+    .project-tag {
+      position: absolute; top: 16px; left: 16px;
+      background: var(--orange); color: white;
+      font-size: 11px; font-weight: 600; letter-spacing: 1.5px;
+      text-transform: uppercase; padding: 4px 10px;
+    }
+    .project-info { padding: 28px; }
+    .project-info h3 { font-size: 17px; font-weight: 700; margin-bottom: 10px; }
+    .project-info p { font-size: 14px; color: var(--gray); line-height: 1.7; }
+    .project-location {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 12px; color: var(--orange); font-weight: 600;
+      margin-top: 14px; letter-spacing: 0.5px;
+    }
+    .project-location svg { width: 12px; height: 12px; fill: var(--orange); }
+
+    /* ─── HISTORY ─── */
+    #history { padding: var(--section-pad); background: var(--white); }
+    .history-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start;
+    }
+    .history-content h2 {
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      font-weight: 800; line-height: 1.2; margin-bottom: 48px;
+    }
+    .timeline { position: relative; }
+    .timeline::before {
+      content: ''; position: absolute; left: 15px; top: 8px;
+      bottom: 0; width: 2px; background: #e8e8e8;
+    }
+    .timeline-item {
+      position: relative; padding-left: 50px; margin-bottom: 40px;
+    }
+    .timeline-item:last-child { margin-bottom: 0; }
+    .timeline-dot {
+      position: absolute; left: 6px; top: 4px;
+      width: 20px; height: 20px; border-radius: 50%;
+      background: var(--white); border: 3px solid var(--orange);
+      z-index: 1; transition: background 0.3s;
+    }
+    .timeline-item:hover .timeline-dot { background: var(--orange); }
+    .timeline-year {
+      font-size: 13px; font-weight: 700; color: var(--orange);
+      letter-spacing: 1px; margin-bottom: 6px;
+    }
+    .timeline-text {
+      font-size: 15px; color: var(--gray); line-height: 1.7;
+    }
+    .history-visual { position: relative; }
+    .history-collage {
+      background: transparent;
+      overflow: hidden;
+      position: relative;
+    }
+    .history-collage img {
+      width: 100%; display: block;
+      mix-blend-mode: normal;
+      transition: transform 0.4s ease;
+    }
+    .history-collage:hover img { transform: scale(1.02); }
+    .history-cta { margin-top: 40px; }
+
+    /* ─── REFERENCES ─── */
+    #references { padding: var(--section-pad); background: var(--light-gray); }
+    .references-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+    }
+    .reference-card {
+      background: var(--white); padding: 36px 32px;
+      position: relative; overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .reference-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.08);
+    }
+    .quote-mark {
+      font-size: 72px; line-height: 0.6;
+      color: var(--orange); font-family: Georgia, serif;
+      margin-bottom: 20px; display: block; opacity: 0.6;
+    }
+    .reference-card p {
+      font-size: 14px; color: var(--gray); line-height: 1.8;
+      margin-bottom: 24px; font-style: italic;
+    }
+    .reference-author {
+      display: flex; align-items: center; gap: 12px;
+      padding-top: 20px; border-top: 1px solid #f0f0f0;
+    }
+    .author-icon {
+      width: 36px; height: 36px; background: var(--orange);
+      border-radius: 50%; display: flex; align-items: center;
+      justify-content: center; font-size: 14px; color: white;
+      font-weight: 700; flex-shrink: 0;
+    }
+    .author-info .name {
+      font-size: 13px; font-weight: 700; color: var(--dark);
+    }
+    .author-info .location {
+      font-size: 12px; color: var(--gray); margin-top: 2px;
+    }
+    .ref-accent {
+      position: absolute; top: 0; right: 0;
+      width: 4px; height: 60px; background: var(--orange);
+    }
+
+    /* ─── CONTACT ─── */
+    #contact { padding: var(--section-pad); background: var(--dark); }
+    .contact-grid {
+      display: grid; grid-template-columns: 1fr 1.4fr; gap: 80px; align-items: start;
+    }
+    .contact-info { }
+    .contact-info .section-label { color: var(--orange); }
+    .contact-info h2 {
+      font-size: clamp(1.8rem, 3vw, 2.4rem);
+      font-weight: 800; color: var(--white); margin-bottom: 20px; line-height: 1.2;
+    }
+    .contact-info p {
+      font-size: 15px; color: rgba(255,255,255,0.6); line-height: 1.8; margin-bottom: 36px;
+    }
+    .contact-details { display: flex; flex-direction: column; gap: 20px; }
+    .contact-detail {
+      display: flex; align-items: flex-start; gap: 16px;
+    }
+    .contact-detail-icon {
+      width: 42px; height: 42px; background: rgba(232,130,10,0.15);
+      border: 1px solid rgba(232,130,10,0.3);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .contact-detail-icon svg {
+      width: 18px; height: 18px; stroke: var(--orange); fill: none; stroke-width: 2;
+    }
+    .contact-detail-text .label {
+      font-size: 11px; font-weight: 600; letter-spacing: 1.5px;
+      text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 3px;
+    }
+    .contact-detail-text .value {
+      font-size: 14px; color: rgba(255,255,255,0.85); font-weight: 500;
+    }
+    /* Form */
+    .contact-form { display: flex; flex-direction: column; gap: 16px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-group { display: flex; flex-direction: column; gap: 8px; }
+    .form-group label {
+      font-size: 12px; font-weight: 600; letter-spacing: 1px;
+      text-transform: uppercase; color: rgba(255,255,255,0.5);
+    }
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: var(--white); padding: 14px 16px;
+      font-size: 14px; font-family: inherit;
+      outline: none; transition: border-color 0.3s, background 0.3s;
+      width: 100%; resize: none;
+    }
+    .form-group input::placeholder,
+    .form-group textarea::placeholder {
+      color: rgba(255,255,255,0.25);
+    }
+    .form-group input:focus,
+    .form-group textarea:focus {
+      border-color: var(--orange);
+      background: rgba(232,130,10,0.06);
+    }
+    .form-group textarea { min-height: 130px; }
+    .form-submit { margin-top: 8px; }
+    .form-submit .btn {
+      width: 100%; text-align: center; padding: 16px;
+      font-size: 14px; letter-spacing: 1px; text-transform: uppercase;
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--darker); padding: 32px 0;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    .footer-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 16px;
+    }
+    .footer-logo { display: flex; align-items: center; gap: 10px; }
+    .footer-logo-icon {
+      width: 34px; height: 34px; flex-shrink: 0;
+    }
+    .footer-logo-icon svg { width: 100%; height: 100%; display: block; }
+    .footer-logo-text { color: rgba(255,255,255,0.7); font-size: 13px; font-weight: 500; }
+    .footer-links {
+      display: flex; gap: 28px; list-style: none;
+    }
+    .footer-links a {
+      color: rgba(255,255,255,0.4); text-decoration: none;
+      font-size: 13px; font-weight: 500; transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--orange); }
+    .footer-copy {
+      color: rgba(255,255,255,0.25); font-size: 12px;
+    }
+
+    /* ─── MOBILE NAV ─── */
+    .mobile-menu {
+      display: none; position: fixed; inset: 0; z-index: 999;
+      background: rgba(17,17,17,0.98);
+      flex-direction: column; align-items: center; justify-content: center; gap: 36px;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      color: white; text-decoration: none; font-size: 24px;
+      font-weight: 700; letter-spacing: 1px;
+      transition: color 0.2s;
+    }
+    .mobile-menu a:hover { color: var(--orange); }
+    .mobile-close {
+      position: absolute; top: 24px; right: 24px;
+      background: none; border: none; color: white;
+      font-size: 32px; cursor: pointer;
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 900px) {
+      .container { padding: 0 24px; }
+      .about-grid, .history-grid, .contact-grid { grid-template-columns: 1fr; gap: 48px; }
+      .services-grid { grid-template-columns: 1fr; }
+      .projects-grid, .references-grid { grid-template-columns: 1fr; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .stat-item:nth-child(2) { border-right: none; }
+      .nav-links, .nav-cta { display: none; }
+      .hamburger { display: flex; }
+      .form-row { grid-template-columns: 1fr; }
+      .footer-inner { flex-direction: column; align-items: flex-start; }
+    }
+    @media (max-width: 480px) {
+      :root { --section-pad: 70px 0; }
+      .stats-grid { grid-template-columns: 1fr; }
+      .stat-item { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.15); }
+      .history-photos { grid-template-columns: 1fr; }
+      .history-photo:first-child { grid-column: span 1; }
+    }
+
+    /* ─── GLOBAL REACH MAP ─── */
+    #global-reach {
+      background: #0e0e0e; padding: 90px 0 0;
+      position: relative; overflow: hidden;
+    }
+    #global-reach .section-header h2 { color: var(--white); }
+    #global-reach .section-header p {
+      color: rgba(255,255,255,0.45); font-size: 15px;
+      margin-top: 14px; max-width: 580px; line-height: 1.7;
+    }
+    .map-wrapper {
+      position: relative; margin-top: 52px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      background: #0a0a0a;
+    }
+    #world-map-d3 {
+      width: 100%; display: block; cursor: grab;
+    }
+    #world-map-d3:active { cursor: grabbing; }
+    .map-controls {
+      position: absolute; bottom: 20px; right: 20px;
+      display: flex; flex-direction: column; gap: 4px; z-index: 10;
+    }
+    .map-control-btn {
+      width: 34px; height: 34px;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: white; display: flex; align-items: center;
+      justify-content: center; cursor: pointer;
+      font-size: 18px; font-weight: 300;
+      transition: background 0.2s, border-color 0.2s;
+      user-select: none; line-height: 1;
+    }
+    .map-control-btn:hover {
+      background: var(--orange); border-color: var(--orange);
+    }
+    .map-legend {
+      display: flex; gap: 32px; padding: 22px 0 60px;
+      flex-wrap: wrap; align-items: center;
+    }
+    .map-legend-item {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 12px; color: rgba(255,255,255,0.5);
+      font-weight: 500; letter-spacing: 0.3px;
+    }
+    .legend-swatch-country {
+      width: 22px; height: 10px; border-radius: 1px;
+      background: rgba(232,130,10,0.3);
+      border: 1px solid rgba(232,130,10,0.5);
+    }
+    .legend-swatch-project {
+      width: 10px; height: 10px; border-radius: 50%;
+      background: var(--orange);
+      box-shadow: 0 0 8px rgba(232,130,10,0.7);
+    }
+    .legend-swatch-hq {
+      width: 12px; height: 12px; border-radius: 50%;
+      background: white; border: 2px solid var(--orange);
+      box-shadow: 0 0 8px rgba(255,255,255,0.4);
+    }
+    /* Tooltip */
+    #map-tooltip {
+      position: fixed; pointer-events: none;
+      background: rgba(14,14,14,0.97);
+      border: 1px solid rgba(232,130,10,0.6);
+      color: white; padding: 11px 15px;
+      font-size: 13px; font-family: 'Inter', sans-serif;
+      z-index: 9999; opacity: 0;
+      transition: opacity 0.15s ease;
+      max-width: 240px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+      border-left: 3px solid var(--orange);
+    }
+    #map-tooltip.visible { opacity: 1; }
+    #map-tooltip .tt-name {
+      font-weight: 700; font-size: 13px; margin-bottom: 4px;
+      color: white;
+    }
+    #map-tooltip .tt-detail {
+      font-size: 11px; color: rgba(255,255,255,0.55);
+      line-height: 1.5;
+    }
+    #map-tooltip .tt-type {
+      font-size: 10px; font-weight: 600; letter-spacing: 1.5px;
+      text-transform: uppercase; color: var(--orange);
+      margin-bottom: 5px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-close" onclick="closeMobileMenu()">✕</button>
+  <a href="#about" onclick="closeMobileMenu()">About Us</a>
+  <a href="#services" onclick="closeMobileMenu()">What We Offer</a>
+  <a href="#global-reach" onclick="closeMobileMenu()">Global Reach</a>
+  <a href="#projects" onclick="closeMobileMenu()">Projects</a>
+  <a href="#references" onclick="closeMobileMenu()">References</a>
+  <a href="#history" onclick="closeMobileMenu()">Our History</a>
+  <a href="#contact" onclick="closeMobileMenu()" class="btn">Get in Touch</a>
+</div>
+
+<!-- Navigation -->
+<nav id="navbar">
+  <div class="container">
+    <div class="nav-inner">
+      <a href="#hero" class="nav-logo">
+        <div class="nav-logo-icon">
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <rect width="100" height="100" rx="17" fill="#E8820A"/>
+            <rect x="6" y="6" width="88" height="88" rx="12" fill="none" stroke="#111" stroke-width="3"/>
+            <ellipse cx="34" cy="52" rx="11" ry="27" fill="#111"/>
+            <circle cx="57" cy="41" r="22" fill="#111"/>
+            <circle cx="63" cy="36" r="14" fill="#E8820A"/>
+            <circle cx="52" cy="67" r="7" fill="#111"/>
+          </svg>
+        </div>
+      </a>
+      <ul class="nav-links">
+        <li><a href="#about">About Us</a></li>
+        <li><a href="#services">What We Offer</a></li>
+        <li><a href="#global-reach">Global Reach</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#references">References</a></li>
+        <li><a href="#history">Our History</a></li>
+      </ul>
+      <a href="#contact" class="btn nav-cta">Get in Touch</a>
+      <button class="hamburger" onclick="openMobileMenu()" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="container">
+    <div class="hero-content">
+      <div class="hero-badge">Est. 1919 · Over a Century of Excellence</div>
+      <h1>Engineering Excellence<br/>in <em>Power Generation</em></h1>
+      <p>Delivering innovative solutions for power generation, retrofit services, and industrial engineering since 1919. Trusted by clients in over 70 countries worldwide.</p>
+      <div class="hero-btns">
+        <a href="#contact" class="btn">Get in Touch</a>
+        <a href="#services" class="btn btn-outline">What We Offer</a>
+      </div>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <div class="hero-scroll-line"></div>
+    Scroll
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-content reveal-left">
+        <div class="section-label">About Us</div>
+        <h2>Trusted Partner in Industrial Excellence</h2>
+        <p>Gebr. Paprottka GmbH has been at the forefront of power generation and industrial engineering for decades. Our commitment to innovation, quality, and customer satisfaction has made us a trusted partner for businesses worldwide.</p>
+        <ul class="about-checks">
+          <li>
+            <div class="check-icon"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>
+            Decades of industry experience
+          </li>
+          <li>
+            <div class="check-icon"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>
+            ISO-compliant quality standards
+          </li>
+          <li>
+            <div class="check-icon"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>
+            24/7 emergency support
+          </li>
+        </ul>
+        <a href="#contact" class="btn">Get in Touch</a>
+      </div>
+      <div class="about-visual reveal-right">
+        <div style="position:relative;background:#111;overflow:hidden;">
+          <img
+            src="https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=900&auto=format&fit=crop&q=80"
+            alt="Power generation facility"
+            style="width:100%;height:340px;object-fit:cover;opacity:0.75;display:block;"
+          />
+          <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.7) 0%,transparent 60%);"></div>
+          <div style="position:absolute;bottom:0;left:0;right:0;padding:28px 32px;">
+            <div style="font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--orange);margin-bottom:8px;">Since 1919</div>
+            <div style="font-size:20px;font-weight:800;color:white;line-height:1.3;">A century of<br/>engineering trust</div>
+          </div>
+          <a href="#global-reach" style="
+            position:absolute;top:20px;right:20px;
+            background:rgba(232,130,10,0.9);color:white;
+            font-size:11px;font-weight:600;letter-spacing:1.5px;
+            text-transform:uppercase;padding:8px 14px;
+            text-decoration:none;display:flex;align-items:center;gap:6px;
+            transition:background 0.2s;
+          " onmouseover="this.style.background='var(--orange-dark)'" onmouseout="this.style.background='rgba(232,130,10,0.9)'">
+            <svg viewBox="0 0 16 16" style="width:12px;height:12px;fill:white;" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="8" r="7" stroke="white" stroke-width="1.5" fill="none"/><ellipse cx="8" cy="8" rx="3" ry="7" stroke="white" stroke-width="1.2" fill="none"/><line x1="1" y1="8" x2="15" y2="8" stroke="white" stroke-width="1.2"/></svg>
+            View Global Map
+          </a>
+        </div>
+        <div class="about-accent"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section id="stats">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-item reveal">
+        <div class="stat-number" data-target="106">0<span class="plus">+</span></div>
+        <div class="stat-label">Years Experience</div>
+      </div>
+      <div class="stat-item reveal">
+        <div class="stat-number" data-target="1600">0<span class="plus">+</span></div>
+        <div class="stat-label">Megawatt Installed</div>
+      </div>
+      <div class="stat-item reveal">
+        <div class="stat-number" data-target="1000">0<span class="plus">+</span></div>
+        <div class="stat-label">Successful Projects</div>
+      </div>
+      <div class="stat-item reveal">
+        <div class="stat-number" data-target="70">0<span class="plus">+</span></div>
+        <div class="stat-label">Countries</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GLOBAL REACH -->
+<section id="global-reach">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-label">Global Presence</div>
+      <h2>Serving clients in 70+ countries</h2>
+      <p>From our headquarters in Itzehoe, Germany to the Philippines, Brazil, and beyond — hover over the map to explore our key project locations. Zoom and drag to navigate.</p>
+    </div>
+  </div>
+  <div class="map-wrapper">
+    <svg id="world-map-d3"></svg>
+    <div class="map-controls">
+      <button class="map-control-btn" id="zoom-in" title="Zoom in">+</button>
+      <button class="map-control-btn" id="zoom-out" title="Zoom out">−</button>
+      <button class="map-control-btn" id="zoom-reset" title="Reset view" style="font-size:13px;">⊙</button>
+    </div>
+  </div>
+  <div class="container">
+    <div class="map-legend">
+      <div class="map-legend-item">
+        <div class="legend-swatch-country"></div>
+        Active market
+      </div>
+      <div class="map-legend-item">
+        <div class="legend-swatch-project"></div>
+        Project location
+      </div>
+      <div class="map-legend-item">
+        <div class="legend-swatch-hq"></div>
+        Headquarters — Itzehoe, Germany
+      </div>
+      <div class="map-legend-item" style="margin-left:auto;color:rgba(255,255,255,0.3);font-size:11px;">
+        Scroll to zoom · Click &amp; drag to pan
+      </div>
+    </div>
+  </div>
+</section>
+<div id="map-tooltip">
+  <div class="tt-type"></div>
+  <div class="tt-name"></div>
+  <div class="tt-detail"></div>
+</div>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-label">What We Offer</div>
+      <h2>Comprehensive Engineering Solutions</h2>
+    </div>
+    <div class="services-grid">
+
+      <!-- Power Generation -->
+      <div class="service-card reveal">
+        <div class="service-number">01</div>
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24" stroke="var(--orange)" fill="none" stroke-width="2">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+          </svg>
+        </div>
+        <h3>Power Generation</h3>
+        <ul>
+          <li>Diesel generators ranging from 2 kVA to 10,000 kVA</li>
+          <li>Low and medium voltage switchboards</li>
+          <li>Auxiliary equipment for complete power stations</li>
+          <li>Erection and supervision services</li>
+        </ul>
+      </div>
+
+      <!-- Engineering -->
+      <div class="service-card reveal">
+        <div class="service-number">02</div>
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24" stroke="var(--orange)" fill="none" stroke-width="2">
+            <circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14M9 12a3 3 0 0 0 6 0"/>
+          </svg>
+        </div>
+        <h3>Engineering</h3>
+        <ul>
+          <li>Complete power plants design and delivery</li>
+          <li>Complete MV / HV switchgear systems</li>
+          <li>Complete MV / HV substations</li>
+          <li>Electrification and power distribution</li>
+        </ul>
+      </div>
+
+      <!-- Spare Parts -->
+      <div class="service-card reveal">
+        <div class="service-number">03</div>
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24" stroke="var(--orange)" fill="none" stroke-width="2">
+            <circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/>
+          </svg>
+        </div>
+        <h3>Spare Parts</h3>
+        <ul>
+          <li>Parts for all makes of diesel and heavy fuel gas engines</li>
+          <li>Spare parts for generators</li>
+          <li>Spare parts for switchgear systems</li>
+          <li>Spare parts for pumps</li>
+        </ul>
+      </div>
+
+      <!-- Retrofit -->
+      <div class="service-card reveal">
+        <div class="service-number">04</div>
+        <div class="service-icon">
+          <svg viewBox="0 0 24 24" stroke="var(--orange)" fill="none" stroke-width="2">
+            <polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/>
+            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+          </svg>
+        </div>
+        <h3>Retrofit &amp; Overhaul</h3>
+        <ul>
+          <li>Renovation and reconstruction of electrical plants</li>
+          <li>Overhaul of electromechanical equipment</li>
+          <li>System improvement and modernisation</li>
+          <li>Full lifecycle asset management</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-label">Projects</div>
+      <h2>Selected Project References</h2>
+    </div>
+    <div class="projects-grid">
+
+      <div class="project-card reveal">
+        <div class="project-image">
+          <img src="https://images.unsplash.com/photo-1621905252507-b35492cc74b4?w=600&auto=format&fit=crop&q=80" alt="Satellite radio station Philippines" onerror="this.parentNode.innerHTML='<div class=\'project-image-placeholder\'><svg viewBox=\'0 0 24 24\'><rect x=\'2\' y=\'2\' width=\'20\' height=\'20\' rx=\'2\' ry=\'2\'/><path d=\'M7 12l5 5 5-10\'/></svg></div>'"/>
+          <div class="project-tag">Philippines</div>
+        </div>
+        <div class="project-info">
+          <h3>Satellite Radio Station</h3>
+          <p>Supplied with electric power by two GP diesel generating sets of 500 kVA, 750 rpm, with MaK engine for the Civil Aeronautics Administration.</p>
+          <div class="project-location">
+            <svg viewBox="0 0 12 12"><path d="M6 1C4.1 1 2.5 2.6 2.5 4.5c0 2.8 3.5 6.5 3.5 6.5s3.5-3.7 3.5-6.5C9.5 2.6 7.9 1 6 1zm0 4.5c-.8 0-1.5-.7-1.5-1.5S5.2 3 6 3s1.5.7 1.5 1.5S6.8 5.5 6 5.5z"/></svg>
+            Makati, Philippines
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card reveal">
+        <div class="project-image">
+          <img src="https://images.unsplash.com/photo-1559302504-64aae6ca6b6d?w=600&auto=format&fit=crop&q=80" alt="Power plant Brazil" onerror="this.parentNode.innerHTML='<div class=\'project-image-placeholder\'><svg viewBox=\'0 0 24 24\'><rect x=\'2\' y=\'2\' width=\'20\' height=\'20\' rx=\'2\' ry=\'2\'/><path d=\'M7 12l5 5 5-10\'/></svg></div>'"/>
+          <div class="project-tag">Brazil</div>
+        </div>
+        <div class="project-info">
+          <h3>Industrial Power Plant</h3>
+          <p>Complete power plant delivered and installed within a short timeframe. Mounted and set into full operation rapidly — withstanding periods of overload without any mechanical or electrical issues.</p>
+          <div class="project-location">
+            <svg viewBox="0 0 12 12"><path d="M6 1C4.1 1 2.5 2.6 2.5 4.5c0 2.8 3.5 6.5 3.5 6.5s3.5-3.7 3.5-6.5C9.5 2.6 7.9 1 6 1zm0 4.5c-.8 0-1.5-.7-1.5-1.5S5.2 3 6 3s1.5.7 1.5 1.5S6.8 5.5 6 5.5z"/></svg>
+            Brusque, Brazil
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card reveal">
+        <div class="project-image">
+          <img src="https://images.unsplash.com/photo-1466611653911-95081537e5b7?w=600&auto=format&fit=crop&q=80" alt="Substation project" onerror="this.parentNode.innerHTML='<div class=\'project-image-placeholder\'><svg viewBox=\'0 0 24 24\'><rect x=\'2\' y=\'2\' width=\'20\' height=\'20\' rx=\'2\' ry=\'2\'/><path d=\'M7 12l5 5 5-10\'/></svg></div>'"/>
+          <div class="project-tag">Global</div>
+        </div>
+        <div class="project-info">
+          <h3>HV Substation Engineering</h3>
+          <p>Design and delivery of complete high-voltage substation systems, including MV/HV switchgear, transformers, and auxiliary equipment.</p>
+          <div class="project-location">
+            <svg viewBox="0 0 12 12"><path d="M6 1C4.1 1 2.5 2.6 2.5 4.5c0 2.8 3.5 6.5 3.5 6.5s3.5-3.7 3.5-6.5C9.5 2.6 7.9 1 6 1zm0 4.5c-.8 0-1.5-.7-1.5-1.5S5.2 3 6 3s1.5.7 1.5 1.5S6.8 5.5 6 5.5z"/></svg>
+            Multiple Locations
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- HISTORY -->
+<section id="history">
+  <div class="container">
+    <div class="history-grid">
+      <div class="history-content reveal-left">
+        <div class="section-label">Our History</div>
+        <h2>A story that began 106 years ago.</h2>
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-year">1919</div>
+            <div class="timeline-text">The company was founded as an iron foundry in Königsberg, East Prussia by <strong>Gustav and Ludwig Paprottka</strong>.</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-year">1923 – 1924</div>
+            <div class="timeline-text">The iron foundry was converted into a trading and export company, shifting focus to <strong>power generation systems</strong> and woodworking machinery.</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-year">1945</div>
+            <div class="timeline-text">Following the war, the family relocated to <strong>Itzehoe</strong> and restarted operations in West Germany — continuing with power generation systems and pump stations.</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-year">Post-war era</div>
+            <div class="timeline-text"><strong>Manfred Paprottka</strong> joined the company and expanded its reach to Brazil and markets around the world.</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-year">Today</div>
+            <div class="timeline-text"><strong>Alexander Paprottka</strong> continues the legacy, overseeing operations and systems in line with the company's long-established tradition of excellence.</div>
+          </div>
+        </div>
+        <div class="history-cta">
+          <a href="#contact" class="btn">Work With Us</a>
+        </div>
+      </div>
+      <div class="history-visual reveal-right">
+        <div class="history-collage" id="history-collage">
+          <img src="history.png" alt="Paprottka historical archive — family and company photographs since 1919"/>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REFERENCES -->
+<section id="references">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-label">References</div>
+      <h2>What Our Clients Say</h2>
+    </div>
+    <div class="references-grid">
+
+      <div class="reference-card reveal">
+        <div class="ref-accent"></div>
+        <span class="quote-mark">"</span>
+        <p>We refer to the 10 units Diesel Electric Generating Plant ordered from your company for use at different radio stations in the Philippines. These units have been in constant operation for 2 years and no malfunctioning has been noted, ensuring the best performance of all radio and navigation aids.</p>
+        <div class="reference-author">
+          <div class="author-icon">G</div>
+          <div class="author-info">
+            <div class="name">G. Machineries</div>
+            <div class="location">Manila, Philippines</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="reference-card reveal">
+        <div class="ref-accent"></div>
+        <span class="quote-mark">"</span>
+        <p>We wish to point out that the complete power plant was delivered and installed within a very short time and has been mounted and set in operation very quickly. The professionalism of your team exceeded our expectations.</p>
+        <div class="reference-author">
+          <div class="author-icon">C</div>
+          <div class="author-info">
+            <div class="name">Chief Engineer</div>
+            <div class="location">Brusque, Brazil</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="reference-card reveal">
+        <div class="ref-accent"></div>
+        <span class="quote-mark">"</span>
+        <p>During the period of strict rationing of electric power, the generating sets withstood a period of overload in a brilliant way — without any mechanical or electrical inconvenience — proving the excellent quality of the material and installation works.</p>
+        <div class="reference-author">
+          <div class="author-icon">A</div>
+          <div class="author-info">
+            <div class="name">ANTARES</div>
+            <div class="location">São Paulo, Brazil</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="container">
+    <div class="contact-grid">
+      <div class="contact-info reveal-left">
+        <div class="section-label">Contact</div>
+        <h2>Let's discuss your next project</h2>
+        <p>Whether you need a new power system, spare parts, or a complete retrofit — our team is ready to help. Reach out and we'll respond within one business day.</p>
+        <div class="contact-details">
+          <div class="contact-detail">
+            <div class="contact-detail-icon">
+              <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <div class="contact-detail-text">
+              <div class="label">Headquarters</div>
+              <div class="value">Itzehoe, Germany</div>
+            </div>
+          </div>
+          <div class="contact-detail">
+            <div class="contact-detail-icon">
+              <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            </div>
+            <div class="contact-detail-text">
+              <div class="label">Email</div>
+              <div class="value">info@paprottka.de</div>
+            </div>
+          </div>
+          <div class="contact-detail">
+            <div class="contact-detail-icon">
+              <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.48 2 2 0 0 1 3.59 1.27h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.37a16 16 0 0 0 6.07 6.07l1.65-1.65a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            </div>
+            <div class="contact-detail-text">
+              <div class="label">Global Reach</div>
+              <div class="value">Serving 70+ countries worldwide</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="reveal-right">
+        <form class="contact-form" onsubmit="handleSubmit(event)">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="name">Full Name</label>
+              <input type="text" id="name" name="name" placeholder="John Smith" required/>
+            </div>
+            <div class="form-group">
+              <label for="email">Email Address</label>
+              <input type="email" id="email" name="email" placeholder="john@company.com" required/>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="company">Company</label>
+            <input type="text" id="company" name="company" placeholder="Your company name"/>
+          </div>
+          <div class="form-group">
+            <label for="subject">Subject</label>
+            <input type="text" id="subject" name="subject" placeholder="e.g. Power generation inquiry"/>
+          </div>
+          <div class="form-group">
+            <label for="message">Message</label>
+            <textarea id="message" name="message" placeholder="Tell us about your project or inquiry…" required></textarea>
+          </div>
+          <div class="form-submit">
+            <button type="submit" class="btn">Send Inquiry →</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-logo">
+        <div class="footer-logo-icon">
+          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <rect width="100" height="100" rx="17" fill="#E8820A"/>
+            <rect x="6" y="6" width="88" height="88" rx="12" fill="none" stroke="#111" stroke-width="3"/>
+            <ellipse cx="34" cy="52" rx="11" ry="27" fill="#111"/>
+            <circle cx="57" cy="41" r="22" fill="#111"/>
+            <circle cx="63" cy="36" r="14" fill="#E8820A"/>
+            <circle cx="52" cy="67" r="7" fill="#111"/>
+          </svg>
+        </div>
+        <div class="footer-logo-text">Gebr. Paprottka GmbH · Est. 1919</div>
+      </div>
+      <ul class="footer-links">
+        <li><a href="#">Impressum</a></li>
+        <li><a href="#">Datenschutz</a></li>
+        <li><a href="#contact">Kontakt</a></li>
+      </ul>
+      <div class="footer-copy">© 2025 Gebr. Paprottka GmbH. All rights reserved.</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ─── NAV SCROLL ───
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  // ─── REVEAL ANIMATIONS ───
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => {
+    observer.observe(el);
+  });
+
+  // ─── COUNTER ANIMATION ───
+  const counterObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && !entry.target.dataset.counted) {
+        entry.target.dataset.counted = 'true';
+        const els = entry.target.querySelectorAll('[data-target]');
+        els.forEach(el => {
+          const target = parseInt(el.dataset.target);
+          const plus = el.querySelector('.plus');
+          const duration = 2000;
+          const step = target / (duration / 16);
+          let current = 0;
+          const timer = setInterval(() => {
+            current += step;
+            if (current >= target) {
+              current = target;
+              clearInterval(timer);
+            }
+            el.childNodes[0].textContent = Math.floor(current).toLocaleString();
+          }, 16);
+        });
+      }
+    });
+  }, { threshold: 0.3 });
+
+  const statsSection = document.getElementById('stats');
+  if (statsSection) counterObserver.observe(statsSection);
+
+  // ─── MOBILE MENU ───
+  function openMobileMenu() {
+    document.getElementById('mobileMenu').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeMobileMenu() {
+    document.getElementById('mobileMenu').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  // ─── FORM SUBMIT ───
+  function handleSubmit(e) {
+    e.preventDefault();
+    const btn = e.target.querySelector('button[type=submit]');
+    btn.textContent = '✓ Message Sent!';
+    btn.style.background = '#2d7a3a';
+    btn.style.borderColor = '#2d7a3a';
+    setTimeout(() => {
+      btn.textContent = 'Send Inquiry →';
+      btn.style.background = '';
+      btn.style.borderColor = '';
+      e.target.reset();
+    }, 3500);
+  }
+
+  // ─── STAGGER REVEAL DELAYS ───
+  document.querySelectorAll('.services-grid .service-card').forEach((card, i) => {
+    card.style.transitionDelay = `${i * 0.1}s`;
+  });
+  document.querySelectorAll('.projects-grid .project-card').forEach((card, i) => {
+    card.style.transitionDelay = `${i * 0.12}s`;
+  });
+  document.querySelectorAll('.references-grid .reference-card').forEach((card, i) => {
+    card.style.transitionDelay = `${i * 0.1}s`;
+  });
+  document.querySelectorAll('.stats-grid .stat-item').forEach((item, i) => {
+    item.style.transitionDelay = `${i * 0.08}s`;
+  });
+
+  // ─── WORLD MAP (D3 + topojson) ───
+  async function initWorldMap() {
+    const svgEl = document.getElementById('world-map-d3');
+    if (!svgEl) return;
+
+    const W = document.body.clientWidth;
+    const H = Math.min(Math.round(W * 0.46), 540);
+    svgEl.setAttribute('width', W);
+    svgEl.setAttribute('height', H);
+
+    let world;
+    try {
+      const resp = await fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json');
+      world = await resp.json();
+    } catch (e) {
+      svgEl.parentNode.style.display = 'none';
+      console.warn('Map data unavailable', e);
+      return;
+    }
+
+    const countries   = topojson.feature(world, world.objects.countries);
+    const borders     = topojson.mesh(world, world.objects.countries, (a, b) => a !== b);
+    const graticule   = d3.geoGraticule()();
+
+    // ISO numeric country IDs — exact countries from real project reference list
+    const activeIds = new Set([
+      276,  // Germany (HQ)
+      784,  // UAE / Abu Dhabi
+      8,    // Albania
+      24,   // Angola
+      48,   // Bahrain
+      68,   // Bolivia
+      76,   // Brazil
+      132,  // Cabo Verde
+      170,  // Colombia
+      218,  // Ecuador
+      818,  // Egypt
+      231,  // Ethiopia
+      250,  // France (NATO)
+      300,  // Greece
+      624,  // Guinea-Bissau
+      356,  // India
+      360,  // Indonesia
+      364,  // Iran
+      368,  // Iraq
+      400,  // Jordan
+      414,  // Kuwait
+      422,  // Lebanon
+      434,  // Libya
+      566,  // Nigeria
+      586,  // Pakistan
+      600,  // Paraguay
+      604,  // Peru
+      608,  // Philippines
+      620,  // Portugal
+      634,  // Qatar
+      678,  // São Tomé & Príncipe
+      682,  // Saudi Arabia
+      694,  // Sierra Leone
+      756,  // Switzerland
+      760,  // Syria
+      158,  // Taiwan
+      764,  // Thailand
+      858,  // Uruguay
+    ]);
+
+    // Real locations from project reference list (aggregated per country)
+    const locations = [
+      { isHQ: true, type: 'Headquarters', name: 'Gebr. Paprottka GmbH',
+        detail: 'Itzehoe, Germany\nFounded 1919 · 106 years of engineering excellence',
+        coords: [9.52, 53.92], count: 0 },
+
+      { type: 'Projects', name: 'Iraq',
+        detail: 'Baghdad, Mosul\n32 projects · 44 units\nClients: Ministry of Defence, Ministry of Electricity, State Organisation of Buildings & more',
+        coords: [44.39, 33.34], count: 32 },
+
+      { type: 'Projects', name: 'Brazil',
+        detail: 'São Paulo, Rio de Janeiro, Recife & more\n31 projects · 51 units\nClients: Sebral, Antares, Siemens do Brasil, Usina Aliança & more',
+        coords: [-46.63, -23.55], count: 31 },
+
+      { type: 'Projects', name: 'Cabo Verde',
+        detail: 'Praia, São Vicente, Mindelo, Sal & more\n26 projects · 40 units\nClients: ELECTRA, Ministerio da Coordenacao, Airport Sal & more',
+        coords: [-23.51, 14.93], count: 26 },
+
+      { type: 'Projects', name: 'Philippines',
+        detail: 'Manila, Laguna, Aparri\n20 projects · 41 units\nClients: Civil Aeronautics Administration, Philippine National Bank, Hotel Mirador & more',
+        coords: [120.97, 14.6], count: 20 },
+
+      { type: 'Projects', name: 'Pakistan',
+        detail: 'Karachi, Lahore, Rawalpindi\n14 projects · 18 units\nClients: Ministry of Defence, Pakistan Steel Mills, Grand Electric Co. & more',
+        coords: [67.01, 24.86], count: 14 },
+
+      { type: 'Projects', name: 'Saudi Arabia',
+        detail: 'Riyadh, Jeddah\n10 projects · 212 units\nClients: Ministry of Industry & Electricity, National Guard, Riyadh Airport',
+        coords: [46.72, 24.69], count: 10 },
+
+      { type: 'Projects', name: 'Syria',
+        detail: 'Damascus, Lattakia\n8 projects · 9 units\nClients: Syrian Arab Army, Palestine Welfare Society, General Establishment of Fishery',
+        coords: [36.29, 33.51], count: 8 },
+
+      { type: 'Projects', name: 'Colombia',
+        detail: 'Bogotá, Manizales\n7 projects · 20 units\nClients: Instituto Nacional de Fomento Municipal, Central Hidroeléctrica de Caldas',
+        coords: [-74.08, 4.71], count: 7 },
+
+      { type: 'Projects', name: 'Portugal',
+        detail: 'Lisbon, Aveiro, Viana do Castelo\n7 projects · 15 units\nClients: ENVC, SNAPA, Socamar, Filipe C. Brito',
+        coords: [-9.14, 38.74], count: 7 },
+
+      { type: 'Projects', name: 'Thailand',
+        detail: 'Bangkok\n6 projects · 12 units\nClients: Royal Irrigation Department, Thai Ministry of Defence, Provincial Electricity Authority',
+        coords: [100.52, 13.75], count: 6 },
+
+      { type: 'Projects', name: 'Qatar',
+        detail: 'Doha\n5 projects · 8 units\nClient: Ministry of Electricity & Water',
+        coords: [51.53, 25.29], count: 5 },
+
+      { type: 'Projects', name: 'Egypt',
+        detail: 'Cairo, Ismailia\n5 projects · 12 units\nClients: Suez Canal Authority, General Egyptian Electricity Corp., Iron & Steel Complex',
+        coords: [31.24, 30.06], count: 5 },
+
+      { type: 'Projects', name: 'Peru',
+        detail: 'Lima, Cusco\n5 projects · 7 units\nClients: Ministerio de Fomento, Cia. Minera Atalaya, Pesquera San Guillermo',
+        coords: [-77.03, -12.05], count: 5 },
+
+      { type: 'Projects', name: 'Jordan',
+        detail: 'Amman, Yadudeh\n5 projects · 8 units\nClients: Jordan Phosphate Mines Co., H.M. The King of the Hashemite Kingdom',
+        coords: [35.93, 31.95], count: 5 },
+
+      { type: 'Projects', name: 'Nigeria',
+        detail: 'Lagos, Port Harcourt, Kaduna\n5 projects · 7 units\nClients: Zenit Dredging, Alakson Engineering, Kaduna State Water Board',
+        coords: [3.38, 6.45], count: 5 },
+
+      { type: 'Projects', name: 'Taiwan',
+        detail: 'Taipei\n4 projects · 5 units\nClients: Taiwan Tobacco & Wine Monopoly, Ministry of Electricity, Central News Agency',
+        coords: [121.56, 25.04], count: 4 },
+
+      { type: 'Projects', name: 'UAE (Abu Dhabi)',
+        detail: 'Abu Dhabi\n3 projects · 5 units\nClient: German Mechanical Co.',
+        coords: [54.37, 24.47], count: 3 },
+
+      { type: 'Projects', name: 'Iran',
+        detail: 'Tehran, Yazd\n3 projects · 5 units\nClients: TRIGGER, Sherkate Sahami Khass Yazd Pitch',
+        coords: [51.42, 35.69], count: 3 },
+
+      { type: 'Projects', name: 'Lebanon',
+        detail: 'Shtoura\n3 projects · 3 units\nClient: Mr. Elias Fares Al Habr',
+        coords: [35.87, 33.87], count: 3 },
+
+      { type: 'Projects', name: 'Greece',
+        detail: 'Athens\n2 projects · 2 units\nClients: Kodak, Eleni Yiannouri (NATO)',
+        coords: [23.73, 37.98], count: 2 },
+
+      { type: 'Projects', name: 'Ecuador',
+        detail: 'Quito, Azogues\n2 projects · 6 units\nClients: Laboratorios LIFE, Industrias Guapán',
+        coords: [-78.49, -0.23], count: 2 },
+
+      { type: 'Projects', name: 'India',
+        detail: 'Goa\n2 projects · 3 units\nClient: Camara Municipal de Goa',
+        coords: [73.83, 15.49], count: 2 },
+
+      { type: 'Projects', name: 'Indonesia',
+        detail: 'Jakarta, Medan\n2 projects · 5 units\nClients: Firma Ratu, PNP Sawit Seberang Tanjung',
+        coords: [106.84, -6.21], count: 2 },
+
+      { type: 'Projects', name: 'Albania',
+        detail: 'Tirana\n1 project · 2 units\nClient: Makina Import Tirana',
+        coords: [19.82, 41.33], count: 1 },
+
+      { type: 'Projects', name: 'Angola',
+        detail: 'Luanda\n1 project · 1 unit\nClient: General Electric Portuguesa / SONEFE',
+        coords: [13.23, -8.84], count: 1 },
+
+      { type: 'Projects', name: 'Bahrain',
+        detail: 'Manama\n1 project · 1 unit · 750 kVA\nClient: Arab Shipbuilding & Repairyard',
+        coords: [50.58, 26.22], count: 1 },
+
+      { type: 'Projects', name: 'Bolivia',
+        detail: 'La Paz\n1 project · 2 units\nClient: Ministerio de Obras Públicas',
+        coords: [-68.13, -16.5], count: 1 },
+
+      { type: 'Projects', name: 'Ethiopia',
+        detail: 'Addis Ababa\n1 project · 1 unit\nClient: National Tobacco Co.',
+        coords: [38.74, 9.03], count: 1 },
+
+      { type: 'Projects', name: 'Guinea-Bissau',
+        detail: 'Bissau\n1 project · 2 units\nClient: SITEC',
+        coords: [-15.6, 11.86], count: 1 },
+
+      { type: 'Projects', name: 'Hong Kong',
+        detail: 'Hong Kong\n1 project · 1 unit\nClient: Southeast Asia & Properties & Finance Ltd.',
+        coords: [114.17, 22.32], count: 1 },
+
+      { type: 'Projects', name: 'Kuwait',
+        detail: 'Kuwait City\n1 project · 5 mobile units\nClient: Ministry of Electricity & Water',
+        coords: [47.98, 29.37], count: 1 },
+
+      { type: 'Projects', name: 'Libya',
+        detail: 'Tripoli\n1 project · 1 unit\nClient: Electric Co.',
+        coords: [13.18, 32.9], count: 1 },
+
+      { type: 'Projects', name: 'Paraguay',
+        detail: 'Asunción\n1 project · 1 unit\nClient: Ministerio de Defensa Nacional',
+        coords: [-57.63, -25.29], count: 1 },
+
+      { type: 'Projects', name: 'São Tomé & Príncipe',
+        detail: 'São Tomé\n1 project · 2 units\nClient: Camara Municipal',
+        coords: [6.73, 0.34], count: 1 },
+
+      { type: 'Projects', name: 'Sierra Leone',
+        detail: 'Yonibana\n1 project · 1 unit\nClient: Yonibana Secondary School',
+        coords: [-11.79, 8.46], count: 1 },
+
+      { type: 'Projects', name: 'Switzerland',
+        detail: 'Geneva\n1 project · 1 unit\nClient: World Meteorological Organization (United Nations)',
+        coords: [6.14, 46.2], count: 1 },
+
+      { type: 'Projects', name: 'Uruguay',
+        detail: 'Montevideo\n11 projects · 15 units\nClients: Administración UTE, Universidad de la República, Banco de Seguros & more',
+        coords: [-56.17, -34.9], count: 11 },
+    ];
+
+    // Build projection
+    const proj = d3.geoNaturalEarth1()
+      .scale(W / 6.3)
+      .translate([W / 2, H / 2]);
+    const path = d3.geoPath().projection(proj);
+
+    const svg = d3.select('#world-map-d3');
+    const defs = svg.append('defs');
+
+    // Ocean gradient background
+    defs.append('radialGradient').attr('id','ocean-grad')
+      .call(g => {
+        g.append('stop').attr('offset','0%').attr('stop-color','#1a2433');
+        g.append('stop').attr('offset','100%').attr('stop-color','#0a0e14');
+      });
+    svg.append('rect').attr('width', W).attr('height', H)
+      .attr('fill','url(#ocean-grad)');
+
+    const g = svg.append('g');
+
+    // Graticule (faint grid lines)
+    g.append('path').datum(graticule)
+      .attr('d', path)
+      .attr('fill', 'none')
+      .attr('stroke', 'rgba(255,255,255,0.04)')
+      .attr('stroke-width', 0.5);
+
+    // Countries
+    const countryPaths = g.selectAll('.country')
+      .data(countries.features)
+      .join('path')
+      .attr('class', 'country')
+      .attr('d', path)
+      .attr('fill', d => activeIds.has(+d.id) ? 'rgba(232,130,10,0.2)' : '#1e2530')
+      .attr('stroke', '#0a0e14')
+      .attr('stroke-width', 0.6);
+
+    // Hover fill for active countries
+    countryPaths
+      .on('mouseover', function (event, d) {
+        if (activeIds.has(+d.id)) {
+          d3.select(this).attr('fill', 'rgba(232,130,10,0.42)');
+        }
+      })
+      .on('mouseout', function (event, d) {
+        if (activeIds.has(+d.id)) {
+          d3.select(this).attr('fill', 'rgba(232,130,10,0.2)');
+        }
+      });
+
+    // Country borders
+    g.append('path').datum(borders)
+      .attr('d', path)
+      .attr('fill', 'none')
+      .attr('stroke', 'rgba(0,0,0,0.4)')
+      .attr('stroke-width', 0.4);
+
+    // Tooltip
+    const tooltip = document.getElementById('map-tooltip');
+    const ttType   = tooltip.querySelector('.tt-type');
+    const ttName   = tooltip.querySelector('.tt-name');
+    const ttDetail = tooltip.querySelector('.tt-detail');
+
+    function showTip(event, d) {
+      ttType.textContent = d.type;
+      ttName.textContent = d.name;
+      ttDetail.innerHTML = d.detail.split('\n').map(l => `<span style="display:block">${l}</span>`).join('');
+      tooltip.classList.add('visible');
+      moveTip(event);
+    }
+    function moveTip(event) {
+      const x = event.clientX, y = event.clientY;
+      tooltip.style.left = (x + (x > window.innerWidth * 0.6 ? -270 : 16)) + 'px';
+      tooltip.style.top  = (y - 10) + 'px';
+    }
+    function hideTip() { tooltip.classList.remove('visible'); }
+
+    // Dot radius scale based on project count
+    const rScale = d => {
+      if (d.isHQ)        return 8;
+      if (d.count >= 25) return 10;
+      if (d.count >= 10) return 8;
+      if (d.count >= 5)  return 6.5;
+      return 5;
+    };
+
+    // Pulsing rings (only for high-activity locations)
+    locations.filter(l => !l.isHQ && l.count >= 5).forEach(loc => {
+      const [px, py] = proj(loc.coords);
+      if (isNaN(px) || isNaN(py)) return;
+      const r0 = rScale(loc);
+      const ring = g.append('circle')
+        .attr('cx', px).attr('cy', py).attr('r', r0)
+        .attr('fill', 'none')
+        .attr('stroke', 'rgba(232,130,10,0.55)').attr('stroke-width', 1.5)
+        .attr('pointer-events', 'none');
+      (function pulse() {
+        ring.attr('r', r0).attr('opacity', 0.8)
+          .transition().duration(2400).ease(d3.easeCubicOut)
+          .attr('r', r0 + 18).attr('opacity', 0)
+          .on('end', pulse);
+      })();
+    });
+
+    // Main location dots
+    g.selectAll('.loc-dot')
+      .data(locations)
+      .join('circle')
+      .attr('class', 'loc-dot')
+      .attr('cx', d => proj(d.coords)[0])
+      .attr('cy', d => proj(d.coords)[1])
+      .attr('r',  rScale)
+      .attr('fill',         d => d.isHQ ? '#ffffff' : '#E8820A')
+      .attr('stroke',       d => d.isHQ ? '#E8820A' : 'rgba(232,130,10,0.3)')
+      .attr('stroke-width', d => d.isHQ ? 3 : 6)
+      .style('cursor', 'pointer')
+      .style('filter', d => d.isHQ
+        ? 'drop-shadow(0 0 7px rgba(255,255,255,0.9))'
+        : 'drop-shadow(0 0 5px rgba(232,130,10,0.85))')
+      .on('mousemove', (event, d) => { showTip(event, d); moveTip(event); })
+      .on('mouseover', (event, d) => showTip(event, d))
+      .on('mouseleave', hideTip);
+
+    // ─── Zoom & Pan ───
+    const zoom = d3.zoom()
+      .scaleExtent([1, 10])
+      .on('zoom', event => { g.attr('transform', event.transform); });
+
+    svg.call(zoom);
+    svg.on('mousemove.tip', event => {
+      if (tooltip.classList.contains('visible')) moveTip(event);
+    });
+
+    document.getElementById('zoom-in').addEventListener('click', () => {
+      svg.transition().duration(350).call(zoom.scaleBy, 1.6);
+    });
+    document.getElementById('zoom-out').addEventListener('click', () => {
+      svg.transition().duration(350).call(zoom.scaleBy, 1 / 1.6);
+    });
+    document.getElementById('zoom-reset').addEventListener('click', () => {
+      svg.transition().duration(550).call(zoom.transform, d3.zoomIdentity);
+    });
+
+    // ─── Responsive Resize ───
+    function resize() {
+      const nW = document.body.clientWidth;
+      const nH = Math.min(Math.round(nW * 0.46), 540);
+      svgEl.setAttribute('width', nW);
+      svgEl.setAttribute('height', nH);
+      svg.select('rect').attr('width', nW).attr('height', nH);
+      proj.scale(nW / 6.3).translate([nW / 2, nH / 2]);
+      g.selectAll('path').attr('d', path);
+      g.selectAll('.loc-dot')
+        .attr('cx', d => proj(d.coords)[0])
+        .attr('cy', d => proj(d.coords)[1]);
+      // pulse rings reposition handled by their stored cx/cy attributes
+    }
+    window.addEventListener('resize', resize);
+  }
+
+  // Load D3 → topojson → initWorldMap
+  (function loadMapLibs() {
+    const s1 = document.createElement('script');
+    s1.src = 'https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js';
+    s1.onload = () => {
+      const s2 = document.createElement('script');
+      s2.src = 'https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js';
+      s2.onload = initWorldMap;
+      document.head.appendChild(s2);
+    };
+    document.head.appendChild(s1);
+  })();
+</script>
+</body>
+</html>
